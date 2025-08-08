@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useGetWeather } from "../../features";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateInfo } from "../../entities";
 import { format } from "date-fns";
+import type { RootState } from "../../app/store";
 
 export type LocationType = {
   latitude: number | null;
@@ -48,10 +49,14 @@ const HomePage = () => {
     );
   }, []);
 
+  const slector: LocationType[] = useSelector(
+    (store: RootState) => store.weather.weather
+  );
+
   const { data, isLoading } = useGetWeather(
-    location?.latitude ?? 0,
-    location?.longitude ?? 0,
-    !!location
+    slector[0]?.latitude ?? 0,
+    slector[0]?.longitude ?? 0,
+    slector.length > 0
   );
 
   useEffect(() => {
@@ -77,15 +82,19 @@ const HomePage = () => {
   const day = format(now, "EEEE");
   const shortDate = format(now, "d MMM ''yy");
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    const now = new Date();
-    const formatted = format(now, "HH:mm:ss");
-    setCurrentTime(formatted);
-  }, 1000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (data) {
+        const timezoneOffset = data.city.timezone;
+        const utcNow = new Date().getTime() + new Date().getTimezoneOffset() * 60000;
+        const cityTime = new Date(utcNow + timezoneOffset * 1000);
+        const formatted = format(cityTime, "HH:mm:ss");
+        setCurrentTime(formatted);
+      }
+    }, 1000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, [data]);
 
   return (
     <div className="h-full p-16 flex items-end">
