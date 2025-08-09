@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useGetWeather } from "../../features";
 import { useDispatch, useSelector } from "react-redux";
 import { updateInfo } from "../../entities";
 import { format } from "date-fns";
 import type { RootState } from "../../app/store";
+import type { IDefaultCity } from "../../shared";
 
 export type LocationType = {
   latitude: number | null;
@@ -18,18 +19,17 @@ interface ITodayInfo {
 
 const HomePage = () => {
   const [location, setLocation] = useState<LocationType | null>(null);
-  const [error, setError] = useState("");
   const [todayInfom, settodayInfo] = useState<ITodayInfo>({
     temperature: 0,
     cityName: "",
     icon: null,
   });
   const [currentTime, setCurrentTime] = useState<string>("");
+  const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation is not supported by your browser");
       toast.error("Geolocation is not supported by your browser");
       return;
     }
@@ -42,28 +42,37 @@ const HomePage = () => {
         });
       },
       (err) => {
-        setError("Permission denied or location unavailable");
         toast.error("Permission denied or location unavailable");
         console.log(err);
       }
     );
   }, []);
 
+  useEffect(() => {
+    const json = localStorage.getItem("defaultCity");
+
+    if (json) {
+      const defaultCity: IDefaultCity = JSON.parse(json);
+      dispatch(updateInfo(defaultCity));
+    }
+    setIsLocalStorageLoaded(true);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLocalStorageLoaded && location) {
+      dispatch(updateInfo(location));
+    }
+  }, [isLocalStorageLoaded, location, dispatch]);
+
   const slector: LocationType[] = useSelector(
     (store: RootState) => store.weather.weather
   );
 
-  const { data, isLoading } = useGetWeather(
+  const { data } = useGetWeather(
     slector[0]?.latitude ?? 0,
     slector[0]?.longitude ?? 0,
     slector.length > 0
   );
-
-  useEffect(() => {
-    if (location) {
-      dispatch(updateInfo(location));
-    }
-  }, [location]);
 
   useEffect(() => {
     if (data) {
@@ -86,7 +95,8 @@ const HomePage = () => {
     const interval = setInterval(() => {
       if (data) {
         const timezoneOffset = data.city.timezone;
-        const utcNow = new Date().getTime() + new Date().getTimezoneOffset() * 60000;
+        const utcNow =
+          new Date().getTime() + new Date().getTimezoneOffset() * 60000;
         const cityTime = new Date(utcNow + timezoneOffset * 1000);
         const formatted = format(cityTime, "HH:mm:ss");
         setCurrentTime(formatted);
@@ -97,14 +107,18 @@ const HomePage = () => {
   }, [data]);
 
   return (
-    <div className="h-full p-16 flex items-end">
-      <div className="flex items-center gap-5">
+    <div className="h-[200px] md:h-full md:p-16 flex items-end">
+      <div className="flex items-center md:gap-5">
         <div>
-          <h2 className="text-[130px]">{todayInfom.temperature}°</h2>
+          <h2 className="text-[60px] md:text-[130px]">
+            {todayInfom.temperature}°
+          </h2>
         </div>
-        <div>
-          <h3 className="text-[69px] tracking-wider">{todayInfom.cityName}</h3>
-          <p>
+        <div >
+          <h3 className="text-[30px] md:text-[69px] tracking-wider leading-[1] md:leading-[1.3]">
+            {todayInfom.cityName}
+          </h3>
+          <p className="text-[10px] md:text-[16px] whitespace-nowrap m-0">
             {currentTime} - {day}, {shortDate}
           </p>
         </div>

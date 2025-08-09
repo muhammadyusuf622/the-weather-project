@@ -17,7 +17,7 @@ export const countryCapitals: ICountryCapitals[] = [
   { country: "Brazil", capital: "Brasília", lat: -15.7801, lon: -47.9292 },
   { country: "India", capital: "New Delhi", lat: 28.6139, lon: 77.209 },
   { country: "Italy", capital: "Rome", lat: 41.9028, lon: 12.4964 },
-  { country: "Spain", capital: "Madrid", lat: 40.4168, lon: -3.7038 },
+  { country: "Spain", capital: "Madrid", lat: 40.416775, lon: -3.70379 },
   { country: "Mexico", capital: "Mexico City", lat: 19.4326, lon: -99.1332 },
   { country: "South Korea", capital: "Seoul", lat: 37.5665, lon: 126.978 },
   { country: "Egypt", capital: "Cairo", lat: 30.0444, lon: 31.2357 },

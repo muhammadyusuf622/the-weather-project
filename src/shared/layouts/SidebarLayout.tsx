@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../../features";
 import type { LocationType } from "../../pages/Home";
 import { useDebaunce } from "../lib";
-import type { IWeatherItem } from "../types";
+import type { IDarkMoon, IWeatherItem } from "../types";
 import type { WeatherData } from "../api/openweather/types";
 import { countryCapitals, type ICountryCapitals } from "../constants";
 import { updateInfo } from "../../entities";
@@ -21,20 +21,32 @@ const SidebarLayout = () => {
   const weatherInfo: LocationType[] = useSelector(
     (store: RootState) => store.weather.weather
   );
+  const darkMoon: boolean = useSelector(
+    (store: RootState) => store.weather.darkMode
+  );
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebaunce(search, 500);
   const [weathers, setWeathers] = useState<IWeatherItem[]>([]);
   const [searchOptions, setSearchOptions] = useState<ICountryCapitals[]>([]);
+  const [localDark, setlocalDark] = useState<boolean>(true);
   const dispatch = useDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const countryData = countryCapitals;
 
-  const { data, isLoading } = useGetWeather(
+  const { data } = useGetWeather(
     weatherInfo[0]?.latitude ?? 0,
     weatherInfo[0]?.longitude ?? 0,
     weatherInfo.length > 0
   );
+
+  useEffect(() => {
+    const json = localStorage.getItem("darkMoon");
+    if (json) {
+      const check: IDarkMoon = JSON.parse(json);
+      setlocalDark(check.darkMoon);
+    }
+  }, [darkMoon]);
 
   useEffect(() => {
     if (debouncedSearch) {
@@ -99,9 +111,13 @@ const SidebarLayout = () => {
   }
 
   return (
-    <div className="bg-white/10  backdrop-blur-[5px] w-[550px] h-[100vh] border-r-5 border-white/20 p-4 text-white overflow-hidden">
+    <div
+      className={`${
+        localDark ? "bg-white/10" : "bg-black/10"
+      }  backdrop-blur-[5px] w-full md:w-[550px] h-[90vh] md:h-[100vh] border-r-5 border-white/20 p-4 text-white overflow-hidden transition-colors duration-1000 ease-in-out `}
+    >
       <div className="w-[80%] m-auto">
-        <div className="relative mt-15">
+        <div className="relative mt-15 w-full md:block hidden">
           <label className="absolute right-5">
             <SidebarLump />
           </label>
@@ -114,11 +130,15 @@ const SidebarLayout = () => {
           />
 
           <div
-            style={{ display: searchOptions[0] ? "block" : "none" }}
-            className="absolute top-15 bg-black/60 backdrop-blur-[5px] p-5 w-full text-[20px] rounded max-h-[calc(100vh-150px)] overflow-y-auto "
+            style={{
+              display: searchOptions[0] ? "block" : "none",
+              // scrollbarWidth: "none",
+            }}
+            className="absolute top-15 bg-black/60 backdrop-blur-[5px] p-2 w-full text-[20px] rounded max-h-[calc(100vh-150px)] overflow-y-auto custom-scroll "
           >
-            {searchOptions?.map((item) => (
+            {searchOptions?.map((item, index) => (
               <p
+                key={index}
                 onClick={() => handleClick(item.capital)}
                 className="border-white border-b-1 mt-3 cursor-pointer"
               >
@@ -128,11 +148,14 @@ const SidebarLayout = () => {
           </div>
         </div>
 
-        <div className="mt-20 max-h-[calc(100vh-150px)] overflow-y-auto pr-2 scrollbar-hidden">
+        <div
+          style={{ scrollbarWidth: "none" }}
+          className="mt-10 md:mt-20 max-h-[calc(100vh-150px)] overflow-y-auto pr-2"
+        >
           {weathers?.map((item) => {
             return (
               <div key={item.id} className="flex flex-col gap-4 text-1xl">
-                <h2 className="text-4xl">{item.day}</h2>
+                <h2 className="text-4xl text-center md:text-start">{item.day}</h2>
                 <div className="flex justify-between items-center">
                   <span>Temp max</span>
                   <span className="flex gap-3">
