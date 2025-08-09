@@ -10,6 +10,7 @@ Bu loyiha React va Redux asosida yozilgan ob-havo va sozlamalar sahifasini o‘z
 - Mamlakat va poytaxtlar ro‘yxatidan shahar qidirish va tanlash.
 - Dark Mode rejimini yoqish/o‘chirish va sozlamalarni localStorage’da saqlash.
 - Redux orqali holatlarni boshqarish.
+- React Query orqali api bilan ishlash.
 - Debounce qilingan qidiruv funksiyasi.
 - Animatsiyalar va interaktiv UI uchun `motion` kutubxonasi.
 - Responsive dizayn va tematik fon rasmlari.
