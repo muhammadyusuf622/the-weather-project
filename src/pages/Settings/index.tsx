@@ -42,8 +42,13 @@ const SettingsPage = () => {
         console.log(err);
       }
     );
-    dispatch(updateInfo(location))
   }
+  
+  useEffect(() => {
+    if (location) {
+      dispatch(updateInfo(location));
+    }
+  }, [location, dispatch]);
 
   useEffect(() => {
     const json = localStorage.getItem("defaultCity");

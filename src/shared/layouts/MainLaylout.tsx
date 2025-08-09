@@ -1,7 +1,7 @@
 import NavbarLayout from "./NavbarLayout";
 import SidebarLayout from "./SidebarLayout";
 import { Outlet } from "react-router"
-import { getSeasonBackground } from "../lib";
+import { useWeatherBackground } from "../lib";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../app/store";
 import { useEffect, useState } from "react";
@@ -9,9 +9,10 @@ import type { IDarkMoon } from "../types";
 
 const MainLayout = () => {
   const [localDark, setLocalDark] = useState<boolean>(true);
-  const seasonalBackground = getSeasonBackground();
+  const seasonalBackground = useWeatherBackground();
 
   const darkMoon = useSelector((store: RootState) => store.weather.darkMode);
+
 
   useEffect(() => {
     const json = localStorage.getItem("darkMoon");

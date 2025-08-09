@@ -6,17 +6,17 @@ describe("weatherSlice reducer", () => {
     darkMode: true,
   };
 
-  it("initial state to'g'ri bo'lishi kerak", () => {
+  it("initial state", () => {
     expect(weatherReducer(undefined, { type: "" })).toEqual(initialState);
   });
 
-  it("updateInfo action weather ni yangilaydi", () => {
+  it("updateInfo action weather", () => {
     const newWeather = { latitude: 41.3, longitude: 69.2 };
     const nextState = weatherReducer(initialState, updateInfo(newWeather));
     expect(nextState.weather).toEqual([newWeather]);
   });
 
-  it("toggleDarkMode action darkMode ni o'zgartiradi", () => {
+  it("toggleDarkMode action darkMode", () => {
     const nextState = weatherReducer(initialState, toggleDarkMode());
     expect(nextState.darkMode).toBe(false);
 
