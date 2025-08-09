@@ -1,69 +1,37 @@
-# React + TypeScript + Vite
+# React Weather & Settings App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bu loyiha React va Redux asosida yozilgan ob-havo va sozlamalar sahifasini o‘z ichiga oladi. Foydalanuvchi o‘z joylashuviga qarab ob-havo ma'lumotlarini olishi, shuningdek, sahifa uchun Dark Mode rejimini yoqishi yoki o‘chirishi mumkin. Shuningdek, foydalanuvchi o‘zining asosiy shahrini qidirib tanlashi mumkin.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Asosiy imkoniyatlar
 
-## Expanding the ESLint configuration
+- Foydalanuvchi geolokatsiyasidan foydalanib, joylashuvni aniqlash.
+- Mamlakat va poytaxtlar ro‘yxatidan shahar qidirish va tanlash.
+- Dark Mode rejimini yoqish/o‘chirish va sozlamalarni localStorage’da saqlash.
+- Redux orqali holatlarni boshqarish.
+- Debounce qilingan qidiruv funksiyasi.
+- Animatsiyalar va interaktiv UI uchun `motion` kutubxonasi.
+- Responsive dizayn va tematik fon rasmlari.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Unit Test
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- weatherSlice uchun test   // path src/entities/weather/model/weatherSlice.test.ts
+- useGetWeather Hook uchun test // path src/features/weather/model/hooks/useGetWeather.test.tsx
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Ishga tushirish
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Talablar
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js (v14 yoki undan yuqori)
+- npm yoki yarn
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### O‘rnatish
+
+```bash
+git clone <repository-url>
+cd <project-folder>
+npm install
+npm run dev
