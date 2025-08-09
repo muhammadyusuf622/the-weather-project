@@ -13,6 +13,7 @@ Bu loyiha React va Redux asosida yozilgan ob-havo va sozlamalar sahifasini o‘z
 - Debounce qilingan qidiruv funksiyasi.
 - Animatsiyalar va interaktiv UI uchun `motion` kutubxonasi.
 - Responsive dizayn va tematik fon rasmlari.
+- Ob-havo, tun, kun va 4 fasilga qarab almashib turuvchi fon rasimlari.
 
 ## Unit Test
 
