@@ -2,21 +2,22 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xl1440: "1440px", // custom breakpoint
+      },
+    },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
-};
-
-// tailwind.config.js
-module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
-  theme: { extend: {} },
   plugins: [
+    require("tailwind-scrollbar-hide"),
     function ({ addUtilities }) {
       addUtilities({
-        '.scrollbar-hide::-webkit-scrollbar': { display: 'none' },
-        '.scrollbar-hide': { '-ms-overflow-style': 'none', 'scrollbar-width': 'none' },
-      })
-    }
-  ]
-}
+        ".scrollbar-hide::-webkit-scrollbar": { display: "none" },
+        ".scrollbar-hide": {
+          "-ms-overflow-style": "none",
+          "scrollbar-width": "none",
+        },
+      });
+    },
+  ],
+};
