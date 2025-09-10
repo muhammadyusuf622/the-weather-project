@@ -59,24 +59,30 @@ const HomePage = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+useEffect(() => {
+  if (typeof window === "undefined") return;
 
-    const handler = (event: any) => {
-      console.log("📍 Appdan location keldi:", event.detail);
+  const handler = (event: MessageEvent) => {
+    try {
+      const coords = JSON.parse(event.data);
+      console.log("📍 Appdan keldi:", coords);
       setLocation({
-        latitude: event.detail.latitude,
-        longitude: event.detail.longitude,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
       });
-      dispatch(updateInfo(event.detail));
-    };
+      dispatch(updateInfo(coords));
+    } catch (e) {
+      console.log("Xabar JSON emas:", event.data);
+    }
+  };
 
-    window.addEventListener("locationFromApp", handler);
+  window.addEventListener("message", handler);
 
-    return () => {
-      window.removeEventListener("locationFromApp", handler);
-    };
-  }, [dispatch]);
+  return () => {
+    window.removeEventListener("message", handler);
+  };
+}, [dispatch]);
+
 
   useEffect(() => {
     const json = localStorage.getItem("defaultCity");
