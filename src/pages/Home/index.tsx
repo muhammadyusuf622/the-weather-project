@@ -60,6 +60,17 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    const handler = (event: any) => {
+      console.log("📍 Appdan keldi:", event.detail);
+      setLocation(event.detail);
+      dispatch(updateInfo(event.detail));
+    };
+
+    window.addEventListener("locationFromApp", handler);
+    return () => window.removeEventListener("locationFromApp", handler);
+  }, [dispatch]);
+
+  useEffect(() => {
     const json = localStorage.getItem("defaultCity");
 
     if (json) {
