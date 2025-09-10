@@ -60,14 +60,22 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const handler = (event: any) => {
-      console.log("📍 Appdan keldi:", event.detail);
-      setLocation(event.detail);
+      console.log("📍 Appdan location keldi:", event.detail);
+      setLocation({
+        latitude: event.detail.latitude,
+        longitude: event.detail.longitude,
+      });
       dispatch(updateInfo(event.detail));
     };
 
     window.addEventListener("locationFromApp", handler);
-    return () => window.removeEventListener("locationFromApp", handler);
+
+    return () => {
+      window.removeEventListener("locationFromApp", handler);
+    };
   }, [dispatch]);
 
   useEffect(() => {
