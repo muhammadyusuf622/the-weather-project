@@ -24,6 +24,14 @@ const HomePage = () => {
     cityName: "",
     icon: null,
   });
+
+  async function cerateUser (): Promise<string> {
+
+    const uuid = crypto.randomUUID()
+
+    return uuid
+  }
+
   const [currentTime, setCurrentTime] = useState<string>("");
   const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
   const dispatch = useDispatch();
@@ -42,7 +50,17 @@ const HomePage = () => {
         });
       },
       (err) => {
-        toast.error("Permission denied or location unavailable");
+        if (err.code === 1) {
+          toast.error("Iltimos, location ruxsatini yoqing");
+        } else if (err.code === 2) {
+          toast.error(
+            "GPS o'chiq yoki signal topilmadi. Iltimos, location'ni yoqing"
+          );
+        } else if (err.code === 3) {
+          toast.error("So'rov vaqti tugadi. Qaytadan urinib ko'ring");
+        } else {
+          toast.error("Location olishda xatolik yuz berdi");
+        }
         console.log(err);
       }
     );
@@ -114,7 +132,7 @@ const HomePage = () => {
             {todayInfom.temperature}°
           </h2>
         </div>
-        <div >
+        <div>
           <h3 className="text-[30px] md:text-[69px] tracking-wider leading-[1] md:leading-[1.3]">
             {todayInfom.cityName}
           </h3>

@@ -67,7 +67,7 @@ const NavbarLayout = () => {
   }
 
   return (
-    <div className="bg-none px-6 py-5 w-full text-white flex items-center justify-between">
+    <div className="bg-none mt-10 px-6 py-5 w-full text-white flex items-center justify-between">
       <motion.div
         onClick={() => handeClick()}
         animate={rotate ? { rotate: 360 } : { rotate: 0 }}
