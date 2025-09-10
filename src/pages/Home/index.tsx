@@ -25,13 +25,6 @@ const HomePage = () => {
     icon: null,
   });
 
-  async function cerateUser (): Promise<string> {
-
-    const uuid = crypto.randomUUID()
-
-    return uuid
-  }
-
   const [currentTime, setCurrentTime] = useState<string>("");
   const [isLocalStorageLoaded, setIsLocalStorageLoaded] = useState(false);
   const dispatch = useDispatch();
